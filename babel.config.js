@@ -14,7 +14,15 @@ module.exports = function (api) {
             "@Utils": './utils',
           }
         }
-      ]
+      ],
+      [
+        'babel-plugin-rewrite-require',
+        {
+          aliases: {
+            stream: 'readable-stream',
+          },
+        },
+      ],
     ],
   };
 };
