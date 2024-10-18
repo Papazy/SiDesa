@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, ImageBackground, Text, View } from 'react-native';
-import bg from '../../assets/images/on-board-1.png'
-import bg2 from '../../assets/images/on-board-2.png'
-import bg3 from '../../assets/images/on-board-3.png'
+
 import { Redirect, useRouter } from 'expo-router';
+
+const bg = require('../../assets/images/on-board-1.png');
+const bg2 = require('../../assets/images/on-board-2.png');
+const bg3 = require('../../assets/images/on-board-3.png');
 
 interface DotProps {
   isFull : boolean

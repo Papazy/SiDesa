@@ -18,7 +18,7 @@ const SecurityPage = () => {
       title: 'Sandi',
       description: 'Terakhir diubah 7 Juni 2020',
       icon: 'lock',
-      link: '/profile/security/password', // Replace with the actual route
+      link: '/profile/changePassword', // Replace with the actual route
     },
     {
       title: 'Email',

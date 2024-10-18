@@ -1,12 +1,72 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import MenuCard from '@/components/MenuCard'; // Adjust the import path according to your project structure.
+import { useRouter } from 'expo-router';
 
-const settings = () => {
+const SettingsPage = () => {
+  const router = useRouter();
+
+  const settingsData = [
+    {
+      title: 'Bahasa',
+      description: 'Bahasa Indonesia',
+      icon: 'globe',
+      link: '/settings/language'
+    },
+    {
+      title: 'Notifikasi',
+      description: 'Pesan, grup dan pemberitahuan lain',
+      icon: 'bell',
+      link: '/settings/notifications'
+    },
+    {
+      title: 'Penyimpanan dan data',
+      description: 'Kelola penyimpanan',
+      icon: 'database',
+      link: '/settings/storage'
+    },
+    {
+      title: 'Hapus Akun',
+      description: 'Keluar dan hapus akun',
+      icon: 'trash',
+      link: '/settings/delete-account'
+    },
+    {
+      title: 'Bantuan',
+      description: 'Pusat bantuan',
+      icon: 'help-circle',
+      link: '/settings/help'
+    }
+  ];
+
   return (
-    <View>
-      <Text>settings</Text>
-    </View>
-  )
-}
+    <ScrollView className="flex-1 bg-white">
+      <View className="p-4">
+        {/* Back Button */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="p-2 bg-white rounded-full shadow"
+        >
+          <MaterialIcons name="arrow-back-ios" size={20} color="#008080" />
+        </TouchableOpacity>
+        <Text className="text-lg font-bold text-teal-600 mt-4">Pengaturan</Text>
 
-export default settings
+        {/* Settings List */}
+        <View className="mt-6">
+          {settingsData.map((item, index) => (
+            <MenuCard
+              key={index}
+              title={item.title}
+              description={item.description}
+              icon={item.icon}
+              link={item.link}
+            />
+          ))}
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default SettingsPage;
