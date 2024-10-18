@@ -115,12 +115,10 @@ const Page2 = () => {
     >
       <View className="bg-opacity-30 flex-1 justify-center px-6 pb-32">
         <View className="mb-4 mt-auto pr-8">
-        <Text className="text-white text-3xl font-bold mb-2">
-          Welcome to Pulo Aceh
+        <Text className="text-white text-3xl font-bold mb-6">
+          Temukan Tujuan Wisata
         </Text>
-        <Text className="text-white text-3xl font-bold mb-2">
-          "Where the wonderful Indonesia starts from"
-        </Text>
+        
         </View>
       </View>
     </ImageBackground>
@@ -134,16 +132,14 @@ const Page3 = () => {
     <ImageBackground
       source={bg3} 
       resizeMode='cover'
-      className="flex-1 justify-center min-h-full w-full"
+      className="min-h-full w-full"
     >
-      <View className="bg-opacity-30 flex-1 justify-center px-6 pb-32">
+      <View className="bg-opacity-30 justify-center px-6 pt-20 ">
         <View className="mb-4 mt-auto pr-8">
-        <Text className="text-white text-3xl font-bold mb-2">
-          Welcome to Pulo Aceh
+        <Text className="text-[#255665] text-3xl font-bold mb-2">
+         Dapatkan informasi wisata dengan mudah
         </Text>
-        <Text className="text-white text-3xl font-bold mb-2">
-          "Where the wonderful Indonesia starts from"
-        </Text>
+   
         </View>
       </View>
     </ImageBackground>

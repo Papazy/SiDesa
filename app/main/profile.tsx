@@ -1,7 +1,41 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MaterialIcons, Feather, AntDesign } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
+import MenuCard from '@/components/MenuCard';
+
+// User Data
+const userData = {
+  id: 1,
+  name: 'NamaUser',
+  email: 'User@mail.com',
+  profileImage: require('../../assets/images/user-avatar.png'), 
+};
+
+const menuOptions= [
+  {
+    id: 1,
+    title: 'Keamanan',
+    description: 'Privasi dan kata sandi',
+    icon: 'lock',
+    link: '/profile/security',
+  },
+  {
+    id: 2,
+    title: 'Pengaturan',
+    description: 'Data Pengguna',
+    icon: 'settings',
+    link: '/profile/settings',
+  },
+  {
+    id: 3,
+    title: 'FAQ',
+    description: 'Pusat Bantuan',
+    icon: 'help-circle',
+    link: '/profile/faq',
+  },
+]
+
 
 
 const Profile = () => {
@@ -19,15 +53,19 @@ const Profile = () => {
         </TouchableOpacity>
 
         {/* Profile Image */}
+        <Text className="text-lg font-bold mt-4">Profile</Text>
+        <View className="border rounded-full m-0 p-0 mt-5">
+
         <Image
-          source={require('../../assets/images/user-avatar.png')}
-          className="w-24 h-24 rounded-full"
+          source={userData.profileImage}
+          className="w-24 h-24 rounded-full m-0 p-0"
           style={{ resizeMode: 'cover' }}
-        />
+          />
+          </View>
 
         {/* Profile Name and Email */}
-        <Text className="text-lg font-bold mt-4">NamaUser</Text>
-        <Text className="text-gray-500">User@mail.com</Text>
+        <Text className="text-lg font-bold mt-4">{userData.name}</Text>
+        <Text className="text-gray-500">{userData.email}</Text>
 
         {/* Edit Profile Button */}
         <TouchableOpacity className="bg-teal-600 px-4 py-2 mt-4 rounded-md">
@@ -37,36 +75,13 @@ const Profile = () => {
 
       {/* Menu Options */}
       <View className="mt-8">
-        {/* Security */}
-        <TouchableOpacity className="flex-row items-center justify-between bg-gray-100 p-4 rounded-lg mb-2">
-          <View className="flex-row items-center">
-            <Feather name="lock" size={20} color="#008080" />
-            <Text className="ml-4 text-gray-700">Keamanan</Text>
-          </View>
-          <Text className="text-gray-400">Privasi dan kata sandi</Text>
-        </TouchableOpacity>
-
-        {/* Settings */}
-        <TouchableOpacity className="flex-row items-center justify-between bg-gray-100 p-4 rounded-lg mb-2">
-          <View className="flex-row items-center">
-            <Feather name="settings" size={20} color="#008080" />
-            <Text className="ml-4 text-gray-700">Pengaturan</Text>
-          </View>
-          <Text className="text-gray-400">Data Pengguna</Text>
-        </TouchableOpacity>
-
-        {/* FAQ */}
-        <TouchableOpacity className="flex-row items-center justify-between bg-gray-100 p-4 rounded-lg">
-          <View className="flex-row items-center">
-            <Feather name="help-circle" size={20} color="#008080" />
-            <Text className="ml-4 text-gray-700">FAQ</Text>
-          </View>
-          <Text className="text-gray-400">Pusat Bantuan</Text>
-        </TouchableOpacity>
+        {menuOptions.map((option) => (
+          <MenuCard key={option.id} {...option} />
+        ))}
       </View>
 
       {/* Logout Button */}
-      <TouchableOpacity className="bg-teal-600 px-4 py-2 mt-8 rounded-md mx-auto flex-row items-center">
+      <TouchableOpacity className="bg-teal-600 px-4 py-2 mt-28 rounded-md mx-auto flex-row items-center">
         <MaterialIcons name="logout" size={20} color="#fff" />
         <Text className="text-white ml-2">Logout</Text>
       </TouchableOpacity>

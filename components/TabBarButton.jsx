@@ -21,7 +21,7 @@ const TabBarButton = (props) => {
     maps: (props) => <Ionicons name="map-outline" size={24} color={color} {...props} />,
 }
   const { isFocused, label, routeName, color, ...restProps } = props;
-  console.log(routeName);
+  // console.log(routeName);
 
   const scale = useSharedValue(0);
 

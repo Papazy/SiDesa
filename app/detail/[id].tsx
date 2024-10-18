@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 export interface Destination {
   id: number;
@@ -38,18 +38,37 @@ const BookmarkIcon = ({ isBookmarked, onPress }: { isBookmarked: boolean; onPres
 const DetailPage = ({ route }: { route: any }) => {
   const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [dest, setDest] = useState<Destination | null>(null);
+  const {id} = useLocalSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const dest = {
-    id: 1,
-    name: 'Pantai Nipah',
-    location: 'Desa Gugop',
-    rating: 4.9,
-    duration: '3.5h',
-    reviews: '12.4k',
-    description:
-      'Pantai yang terletak di Gampong (Desa) Rabo, Pulo Nasi, Kecamatan Pulo Aceh, Provinsi Aceh Besar ini memiliki keindahan alam yang spektakuler\nPantai nan indah dengan potensi wisata menawarkan anda ketenangan, memanjakan mata anda dengan panorama laut biru dan pasirnya yang lembut dan putih.\nPantai ini menjadi daya tarik tersendiri, jika cuaca sedang bagus, anda bisa melihat pada sisi timur laut Gunung Seulawah, salah satu gunung tertinggi di Aceh.',
-    image: 'url',
-  };
+  useEffect(() => {
+    console.log("id", id);
+    if(id % 2 === 1){
+      setDest({
+        id: 1,
+        name: 'Pantai Nipah',
+        description: 'Pantai Nipah adalah salah satu pantai yang terletak di Desa Gugop, Kecamatan Simeulue Tengah, Kabupaten Simeulue, Aceh. Pantai ini memiliki keindahan alam yang sangat menakjubkan, dengan pasir putih yang bersih dan air laut yang jernih. Pantai Nipah juga memiliki ombak yang cukup besar, sehingga cocok untuk para peselancar yang ingin mencoba keberuntungan di sini.',
+        location: 'Desa Gugop',
+        rating: 4.9,
+        duration: '1 jam',
+        reviews: '120 reviews',
+        image: require('../../assets/images/destinasi-1.png'),
+      });
+    }else{
+      setDest({
+        id: 2,
+        name: 'Pantai Mata Ie',
+        description: 'Pantai Mata Ie adalah salah satu pantai yang terletak di Desa Gugop, Kecamatan Simeulue Tengah, Kabupaten Simeulue, Aceh. Pantai ini memiliki keindahan alam yang sangat menakjubkan, dengan pasir putih yang bersih dan air laut yang jernih. Pantai Mata Ie juga memiliki ombak yang cukup besar, sehingga cocok untuk para peselancar yang ingin mencoba keberuntungan di sini.',
+        location: 'Desa Gugop',
+        rating: 4.9,
+        duration: '1 jam',
+        reviews: '120 reviews',
+        image: require('../../assets/images/destinasi-2.png'),
+      })
+    }
+    setIsLoading(false);
+  },[])
 
   const handleBookmarkToggle = async () => {
     try {
@@ -81,10 +100,18 @@ const DetailPage = ({ route }: { route: any }) => {
     }
   };
 
+  if(isLoading){
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    )
+  }
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={{ position: 'relative' }}>
-        <Image source={require('../../assets/images/destinasi-1.png')} style={{ width: '100%', height: 250 }} />
+        <Image source={dest?.image} style={{ width: '100%', height: 250 }} />
         <TouchableOpacity
           onPress={() => router.back()}
           style={{

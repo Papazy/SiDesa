@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Image, TextInput, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import bg from '@/assets/images/header.png'; // Sesuaikan dengan path gambar Anda
-import logo from '@/assets/images/logo.png'; // Sesuaikan dengan path logo Anda
+import bg from '@/assets/images/header.png'; 
+import logo from '@/assets/images/logo.png'; 
 import destinasi1 from '@/assets/images/destinasi-1.png';
 import destinasi2 from '@/assets/images/destinasi-2.png';
 import colors from '@/assets/color';
@@ -16,7 +16,6 @@ const destinations = [
   { id: 4, name: 'Pantai Mata Ie', location: 'Desa Gugop', rating: 4.9, image: destinasi2 },
   { id: 5, name: 'Pantai Nipah', location: 'Desa Gugop', rating: 4.9, image: destinasi1 },
   { id: 6, name: 'Pantai Mata Ie', location: 'Desa Gugop', rating: 4.9, image: destinasi2 },
-  // Tambahkan data destinasi lainnya sesuai kebutuhan
 ];
 
 export default function HomePage() {
