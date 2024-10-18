@@ -1,78 +1,50 @@
+# Welcome to your Expo app 👋
 
-# SubMentor
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-SubMentor adalah platform inovatif yang menghubungkan pencari ilmu dengan mentor berkompeten, menciptakan ekosistem pembelajaran dinamis. Pengguna dapat mencari mentor berdasarkan sub bab pelajaran, melihat profil mentor yang komprehensif, dan berkomunikasi langsung untuk menjadwalkan sesi. Fitur-fitur utamanya meliputi pencarian spesifik, profil mentor yang detail, penambahan skill oleh mentor, pesan langsung, serta rating dan ulasan. SubMentor memfasilitasi pembelajaran personal dan efektif dengan menggabungkan keahlian mentor dan kebutuhan belajar pengguna.
+## Get started
 
-## 🚀 About Team
-Tim SubMentor beranggotakan :
-- [Aditya Rizki Ramadhan](https://github.com/AditRizkii)
-- [Ahmad Faqih Al Ghiffary](https://github.com/AFaqihAG)
-- [Fajry Ariansyah](https://github.com/Papazy)
-- [Furqan Al Ghifari Zulva](https://github.com/furqanx)
+1. Install dependencies
 
-## Installation
+   ```bash
+   npm install
+   ```
 
-Instalasi kode berikut
+2. Start the app
+
+   ```bash
+    npx expo start
+   ```
+
+In the output, you'll find options to open the app in a
+
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+
+## Get a fresh project
+
+When you're ready, run:
 
 ```bash
-  npm install
-  npx expo install
+npm run reset-project
 ```
-## Run Project
 
-#### Dengan Expo-Go*
-Untuk menjalankan dengan **Expo Go**, eksekusi kode berikut
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-```bash
-  npx expo start
-```
-lalu tekan tombol **a** untuk menjalankan android
+## Learn more
 
-#### Dengan Dev-Client*
+To learn more about developing your project with Expo, look at the following resources:
 
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-untuk menjalankan dengan ***Dev Client***
+## Join the community
 
-* Buat akun [EAS](https://expo.dev/eas)
-* Jalankan ```npm install -g eas-cli```
-* Di dalam dir project, jalankan ```eas build:configure```
-* Jalan kan ```eas build --profile development --platform android```
-* Tunggu hingga build digenerate
-* Jika terdapat pilihan *install and run on your android* ketik **Y** (untuk install di emulator android)
-* Jika tidak, download build tersebut lalu drag ke emulator untuk diinstall
-* Terakhir, jalankan ```npx expo start --dev-client``` dan tekan **a** untuk menjalankan emulator 
+Join our community of developers creating universal apps.
 
-\* **Note** : Require
-* expo sdk 49
-* Node 18+
-* Android Studio Emulator
-
-
-## Screenshots
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/1.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/2.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/3.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/4.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/5.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/6.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/7.png?raw=true" width="267" height="527">
-<img src="https://github.com/Papazy/SubMentor/blob/main/demo/8.png?raw=true" width="267" height="527">
-
-
-
-
-
-    
-## Tech Stack
-
-**Mobile:** React Native, Expo
-
-**Backend:** Firebase
-
-**Database:** Firestore
-
-**Auth:** Firebase Authentication
-
-
-
-
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
