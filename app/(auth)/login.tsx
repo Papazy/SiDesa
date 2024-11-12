@@ -1,20 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, ImageBackground, Image, TextInput, TouchableOpacity } from 'react-native';
-import bg from '../../assets/images/login-bg.png';
+import bg from '../../assets/images/login-bg.jpg';
 import logo from '../../assets/images/logo.png';
 import { Link, useRouter } from 'expo-router';
+import { useAuth } from '@/hooks/useAuth';
+import { LoadingModal, NotificationModal } from '@/components/Modal';
+import { Ionicons } from '@expo/vector-icons';
 
 const LoginPage = () => {
 
-  const router = useRouter();
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState('error');
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
 
 
-  const handleOnPress = () => {
-    router.push('/main');
+
+  const {login} = useAuth();
+
+  const [data, setData] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const handleOnPress = async () => {
+    setIsLoading(true);
+    try{
+      await login({username: data.email, password:data.password});
+    }catch(err){
+      setIsLoading(false);
+      console.log(err)
+      setNotificationType('error');
+      setNotificationMessage('Login Gagal, Periksa kembali email dan password anda');
+      setShowNotification(true);
+    }
+    setIsLoading(false);
   }
-
+  
   return (
     <View className="flex-1 w-full">
+
+      {notificationType === "error" && <NotificationModal type="error" message={notificationMessage} onClose={()=>setShowNotification(false)} visible={showNotification}/>}
+      {notificationType === "success" && <NotificationModal type="success" message={notificationMessage} onClose={()=>setShowNotification(false)} visible={showNotification}/>}
+      {notificationType === "notif" && <NotificationModal type="notif" message={notificationMessage} onClose={()=>setShowNotification(false)} visible={showNotification}/>}
+      {isLoading && <LoadingModal visible={isLoading} />}
+
       <ImageBackground
         source={bg}
         resizeMode="cover"
@@ -42,11 +73,10 @@ const LoginPage = () => {
               marginBottom: 16,
               height: 50,
             }}
+            value={data.email}
+            onChangeText={(val) => setData({ ...data, email: val })}
           />
-          <TextInput
-            placeholder="Kata Sandi"
-            placeholderTextColor="#ccc"
-            secureTextEntry
+           <View
             style={{
               backgroundColor: '#fff',
               opacity: 0.8,
@@ -54,8 +84,30 @@ const LoginPage = () => {
               paddingHorizontal: 16,
               marginBottom: 16,
               height: 50,
+              justifyContent:'center'
             }}
-          />
+          >
+
+          <TextInput
+            placeholder="Kata Sandi"
+            placeholderTextColor="#a3a2a2"
+            secureTextEntry ={!visiblePassword}
+            style={{ 
+              marginRight:20
+             }}
+            value={data.password}
+            onChangeText={(val) => setData({ ...data, password: val })}
+            />
+            <TouchableOpacity
+              onPress={() => setVisiblePassword(!visiblePassword)}
+              style={{
+                position: 'absolute',
+                right: 10,
+              }}
+            >
+              <Ionicons name={visiblePassword ? 'eye-off' : 'eye'} size={20} color="#333" />
+            </TouchableOpacity>
+            </View>
           <TouchableOpacity
             style={{
               backgroundColor: '#333',

@@ -2,16 +2,10 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { DestinationType } from '@/types/Destination';
 
-export interface Destination {
-  id: number;
-  name: string;
-  location: string;
-  rating: number;
-  image: any;
-}
 
-const CardDest = ({ dest }: { dest: Destination }) => {
+const CardDest = ({ dest }: { dest: DestinationType }) => {
   const router = useRouter();
   return (
     <TouchableOpacity
@@ -30,13 +24,14 @@ const CardDest = ({ dest }: { dest: Destination }) => {
 
       onPress={() => router.push(`/detail/${dest.id}`)}
     >
-      <Image source={dest.image} style={{ width: '100%', height: 120 }} />
+      {dest.image_url && <Image source={{ uri: dest.image_url }} style={{ width: '100%', height: 120 }} />}
+      {/* <Image source={dest.image_url} style={{ width: '100%', height: 120 }} /> */}
       <View style={{ padding: 8 }}>
         <Text style={{ fontWeight: 'bold' }}>{dest.name}</Text>
-        <Text style={{ color: '#888', fontSize: 12 }}>{dest.location}</Text>
+        <Text style={{ color: '#888', fontSize: 12 }}>{dest.location_name}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
           <AntDesign name="star" size={16} color="#FFD700" />
-          <Text style={{ marginLeft: 4, color: '#888' }}>{dest.rating}</Text>
+          <Text style={{ marginLeft: 4, color: '#888' }}>{dest.average_rating}</Text>
         </View>
       </View>
     </TouchableOpacity>

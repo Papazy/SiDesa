@@ -3,9 +3,9 @@ import { Button, ImageBackground, Text, View } from 'react-native';
 
 import { Redirect, useRouter } from 'expo-router';
 
-const bg = require('../../assets/images/on-board-1.png');
-const bg2 = require('../../assets/images/on-board-2.png');
-const bg3 = require('../../assets/images/on-board-3.png');
+const bg = require('../../assets/images/on-board-1.jpg');
+const bg2 = require('../../assets/images/on-board-2.jpg');
+const bg3 = require('../../assets/images/on-board-3.jpg');
 
 interface DotProps {
   isFull : boolean

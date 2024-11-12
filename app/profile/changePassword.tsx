@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import colors from '@/assets/color';
 
 const ChangePasswordPage = () => {
   const [oldPassword, setOldPassword] = useState('');
@@ -26,6 +27,11 @@ const ChangePasswordPage = () => {
 
   return (
     <ScrollView className="flex-1 bg-white">
+      <View className='modal-view absolute justify-center items-center w-full h-screen z-50'>
+        <View className=' bg-slate-100 p-10 rounded-xl elevation'>
+          <Text className={`text-xl text-center `} style={{ color: colors.title }}>Kata sandi anda berhasil diubah</Text>
+        </View>
+      </View>
       <View className="p-4">
         {/* Back Button */}
         <TouchableOpacity

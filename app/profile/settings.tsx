@@ -42,6 +42,7 @@ const SettingsPage = () => {
 
   return (
     <ScrollView className="flex-1 bg-white">
+      
       <View className="p-4">
         {/* Back Button */}
         <TouchableOpacity
