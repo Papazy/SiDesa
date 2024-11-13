@@ -7,10 +7,10 @@ export default function AuthLayout() {
   const router = useRouter();
   const {token} = useAuth();
 
+    if(token){
+      router.replace({pathname:'/main'});
+    }
 
-  if(token){
-    router.replace({pathname:'/main'});
-  }
 
   return (
     <Stack  screenOptions={{

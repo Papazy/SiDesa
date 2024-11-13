@@ -13,7 +13,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 const RegisterPage = () => {
 
   const [showNotification, setShowNotification] = useState(false);
-  const [notificationType, setNotificationType] = useState('error');
+  const [notificationType, setNotificationType] = useState('');
   const [notificationMessage, setNotificationMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
@@ -44,6 +44,9 @@ const RegisterPage = () => {
     try{
       console.log('Mencoba membuat akun');
       await register({email: data.email, name: data.username, password: data.password});
+      setNotificationMessage("Akun berhasil dibuat")
+      setNotificationType("success")
+      setShowNotification(true);
     }catch(err: any){
       console.log(err)
       setNotificationMessage("Periksa kembali data anda")

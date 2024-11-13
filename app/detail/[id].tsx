@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Modal, Button } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Modal, Button, Platform, Linking } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { DestinationType } from '@/types/Destination';
@@ -45,7 +45,7 @@ const DetailPage = ({ route }: { route: any }) => {
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
 
-  const {token, getLoginUser} = useAuth()
+  const {token, getLoginUser} = useAuth();
 
   // rating
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,30 +60,46 @@ const DetailPage = ({ route }: { route: any }) => {
   const handleRatingSubmit = async () => {
     console.log(`User rating: ${selectedRating}`);
     setModalVisible(false);
-    try{
-      const res = await fetch(process.env.EXPO_PUBLIC_API_URL + '/places/'+id+'/rate' ,{
+    try {
+      const res = await fetch(process.env.EXPO_PUBLIC_API_URL + '/places/' + id + '/rate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           rating: selectedRating,
           message: 'Bagus',
         }),
-      })
+      });
 
-      if(res.ok){
+      if (res.ok) {
         setRefresh(!refresh);
         setShowModal(true);
-      }else{
+      } else {
         const data = await res.json();
         console.log('error', data);
         alert("error");
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
       alert("terjadi Error");
+    }
+  };
+
+  const openGoogleMaps = () => {
+    const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = `${dest.latitude},${dest.longitude}`;
+    const label = dest.name; // Use the destination name as a label
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+
+    if (url) {
+      Linking.openURL(url);
+    } else {
+      Alert.alert("Error", "Cannot open maps.");
     }
   };
 
@@ -103,18 +119,18 @@ const DetailPage = ({ route }: { route: any }) => {
     };
 
     const fetchBookmarkData = async () => {
-      try{
+      try {
         const data = await getLoginUser();
-        if(!data){
-          Alert.alert("error", "Tidak ada data")
-        }else{
-         const mapData = data.saved_places.map((place: any) => place.id);
+        if (!data) {
+
+        } else {
+          const mapData = data.saved_places.map((place: any) => place.id);
           setIsBookmarked(mapData.includes(id));
         }
-      }catch(err){
-        Alert.alert("error", "Tidak dapat mengakses data")
+      } catch (err) {
+        Alert.alert("error", "Tidak dapat mengakses data");
       }
-    }
+    };
     fetchDetailData();
     fetchBookmarkData();
   }, [refresh]);
@@ -124,12 +140,12 @@ const DetailPage = ({ route }: { route: any }) => {
       const newBookmarkState = !isBookmarked;
       setIsBookmarked(newBookmarkState);
 
-      const response = await fetch(process.env.EXPO_PUBLIC_API_URL+'/users/save/'+id, {
+      const response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/users/save/' + id, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization' : `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       });
 
-      if (!response.ok){
+      if (!response.ok) {
         const resData = await response.json();
         console.log(resData);
         throw new Error('Failed to update bookmark');
@@ -173,12 +189,16 @@ const DetailPage = ({ route }: { route: any }) => {
       <View style={{ padding: 16 }}>
         <View className="flex-1 flex-row justify-between items-center">
           <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8, maxWidth: '90%' }}>{dest.name}</Text>
-          <BookmarkIcon isBookmarked={isBookmarked} onPress={()=>handleBookmarkToggle()} />
+          <BookmarkIcon isBookmarked={isBookmarked} onPress={() => handleBookmarkToggle()} />
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
           <View className="flex-1 flex-row items-center gap">
-            <InfoCard icon={<MaterialIcons name="location-on" size={20} color="#008080" />} text={dest?.distance ? dest.distance.toString() : '-'} />
+            <InfoCard
+              icon={<MaterialIcons name="location-on" size={20} color="#008080" />}
+              text={dest?.distance ? dest.distance.toString() : '-'}
+              onPress={openGoogleMaps}
+            />
             <InfoCard
               icon={<AntDesign name="star" size={20} color="#FFD700" />}
               text={dest?.average_rating ? dest.average_rating.toFixed(1).toString() : '0'}
@@ -192,7 +212,7 @@ const DetailPage = ({ route }: { route: any }) => {
         </Text>
       </View>
 
-      <NotificationModal type={"success"} message="Berhasil memberikan rating" visible={showModal} onClose={()=>setShowModal(false)}  />
+      <NotificationModal type={"success"} message="Berhasil memberikan rating" visible={showModal} onClose={() => setShowModal(false)} />
 
       <Modal visible={modalVisible} transparent animationType="fade">
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -286,6 +306,5 @@ const styles = {
     fontSize: 16,
   },
 };
-
 
 export default DetailPage;

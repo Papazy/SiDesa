@@ -8,7 +8,7 @@ export default function Layout() {
         <Tabs
         screenOptions={{ 
           headerShown:false
-         }}
+         }}e
           tabBar={props=> <TabBar {...props} 
         />}
     >

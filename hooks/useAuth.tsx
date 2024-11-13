@@ -1,6 +1,7 @@
 import { useNavigation, useRouter } from "expo-router";
 import React, { createContext, ReactNode, useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from "react-native";
 
 type loginType = {
   username: string;
@@ -106,7 +107,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           throw new Error(`HTTP error! status: ${resData.detail}`);
       }
       console.log("resData: ", resData);
-      alert('OTP berhasil diverifikasi');
+      Alert.alert("Registrasi Berhasil", "Silahkan login untuk melanjutkan");
       router.push({pathname:'/login'});
   } catch (error) {
       console.error("Error verifying OTP:", error);
@@ -158,6 +159,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       if(responseData.detail === 'Email already registered'){
         await sendOtp(data.email);
+        
         router.push({pathname:'/otp', params: {email: data.email}});
       }else{
         throw new Error("error");

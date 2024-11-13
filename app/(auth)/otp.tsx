@@ -55,8 +55,8 @@ const Otp = () => {
 
   return (
     <View className="flex-1 bg-white px-4 justify-center items-center">
-      <Text className="text-teal-600 text-lg font-bold mb-1">Email</Text>
-      <Text className="text-gray-700 text-left mb-8">Masukkan kode verifikasi yang dikirimkan ke email </Text>
+      <Text className="text-teal-600 text-2xl font-bold mb-12">Verifikasi Email</Text>
+      <Text className="text-gray-700 text-center mb-8">Masukkan kode verifikasi yang dikirimkan ke email {email}</Text>
 
 
       <View className="flex-row space-x-2 mb-6">
