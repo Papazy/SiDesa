@@ -21,12 +21,8 @@ const SecurityPage = () => {
   )
   // Data for the security options
   const securityOptions = [
-    {
-      title: 'Aktivitas keamanan terbaru',
-      description: 'Perangkat baru iPhone 14 masuk ke akun anda',
-      icon: 'activity',
-      link: '/profile/security/recent-activity', // Replace with the actual route
-    },
+    
+  
     {
       title: 'Sandi',
       description: 'Ubah Sandi anda',
@@ -39,28 +35,10 @@ const SecurityPage = () => {
       icon: 'mail',
       link: '/profile/security/email', // Replace with the actual route
     },
-    // {
-    //   title: 'Nomor telepon Pemulihan',
-    //   description: '0896-2448-2948',
-    //   icon: 'phone',
-    //   link: '/profile/security/recovery-phone', // Replace with the actual route
-    // },
+   
   ];
 
-  // const connectedDevices = [
-  //   {
-  //     title: 'iPhone 14',
-  //     description: '',
-  //     icon: 'smartphone',
-  //     link: '/profile/security/connected-devices', // Replace with the actual route
-  //   },
-  //   {
-  //     title: 'Windows',
-  //     description: '',
-  //     icon: 'monitor',
-  //     link: '/profile/security/connected-devices', // Replace with the actual route
-  //   },
-  // ];
+  
 
   if(isLoading) return <Text>Loading...</Text>
 
@@ -90,19 +68,7 @@ const SecurityPage = () => {
         ))}
       </View>
 
-      {/* Connected Devices Section */}
-      {/* <View className="p-4">
-        <Text className="text-teal-600 font-bold mb-2">Perangkat yang terhubung</Text>
-        {connectedDevices.map((device, index) => (
-          <MenuCard
-            key={index}
-            title={device.title}
-            description={device.description}
-            icon={device.icon}
-            link={device.link}
-          />
-        ))}
-      </View> */}
+    
     </ScrollView>
   );
 };

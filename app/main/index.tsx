@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, Image, TextInput, ScrollView, ImageBackground, TouchableOpacity, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, Image, TextInput, ScrollView, ImageBackground, TouchableOpacity, ActivityIndicator, Animated, Linking, Platform } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import bg from '@/assets/images/header.jpg'; 
@@ -10,6 +10,10 @@ import colors from '@/assets/color';
 import CardDest from '@/components/CardDest';
 import { useRouter } from 'expo-router';
 import { DestinationType } from '@/types/Destination';
+import * as Location from 'expo-location'
+import { Alert } from 'react-native';
+import { getDistanceBetweenPlaces } from '@/helper/getDistanceBetweenPlaces';
+
 
 // const destinations = [
 //   { id: 1, name: 'Pantai Nipah', location: 'Desa Gugop', rating: 4.9, image: destinasi1 },
@@ -95,6 +99,78 @@ export default function HomePage() {
     }, []) 
   );
 
+
+  const [currentLocation, setCurrentLocation] = useState<any | null>({
+    latitude: 5.741861,
+    longitude: 95.046500,
+  });
+  const [displayCurrentAddress, setDisplayCurrentAddress] = useState('Location Loading.....');
+  const [locationServicesEnabled, setLocationServicesEnabled] = useState(false)
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+
+  useEffect(() => {
+    checkIfLocationEnabled();
+    getCurrentLocation();
+  }, [])
+  const checkIfLocationEnabled = async () => {
+    let enabled = await Location.hasServicesEnabledAsync();
+    if (!enabled) {
+      Alert.alert('Location not enabled', 'Please enable your Location', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    } else {
+      setLocationServicesEnabled(enabled)
+    }
+  }
+  //get current location
+  const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    console.log(status);
+    if (status !== 'granted') {
+      Alert.alert('Permission denied', 'Allow the app to use the location services', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    }
+
+    //get current position lat and long
+    const { coords } = await Location.getCurrentPositionAsync();
+    console.log(coords)
+
+    if (coords) {
+      const { latitude, longitude } = coords;
+      console.log(latitude, longitude);
+      setLatitude(latitude);
+      setLongitude(longitude);
+
+      setCurrentLocation({
+        latitude,
+        longitude
+      })
+
+      // mendapatkan alamat dari latitude dan longitude
+      let responce = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude
+      });
+      console.log(responce);
+      for (let item of responce) {
+        let address = `${item.name} ${item.city} ${item.postalCode}`
+        setDisplayCurrentAddress(address)
+      }
+    }
+  }
+
   // Filter 
   useEffect(() => {
     const filtered = destinations.filter(dest =>
@@ -104,6 +180,7 @@ export default function HomePage() {
     setFilteredDestinations(filtered);
   }, [searchText, destinations]);
 
+  
   
 
   return (
@@ -154,7 +231,7 @@ export default function HomePage() {
 
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }} className={`text-[${colors.text}`}>
           {filteredDestinations.map((dest) => (
-            <CardDest key={dest.id} dest={dest} />
+            <CardDest key={dest.id} dest={dest} latitude={latitude} longitude={longitude}/>
           ))}
         </View>
         )}

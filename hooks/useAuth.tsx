@@ -156,6 +156,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const responseData = await response.json();
     if (response.ok) {
       router.push({pathname:'/otp', params: {email: data.email}});
+      return 
     } else {
       if(responseData.detail === 'Email already registered'){
         await sendOtp(data.email);
@@ -185,21 +186,28 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
           }
         );
+        const resData = await res.json();
         if(res.ok){
-          const resData = await res.json();
           if(resData.photo_url === ""){
             resData.photo_url = null
           }
           console.log(resData);
           return resData;
         }else{
+          if(resData.detail === "Inactive user"){
+            alert("User tidak aktif, silahkan verifikasi email anda");
+            await logout();
+            router.replace({pathname:'/(auth)/sendEmailToVerify', params: {email: resData.email}});
+            throw new Error("User tidak aktif");
+          }
           console.log("tidak ada user")
           return null
         }
       }catch(err){
         console.log(err);
         alert("terjadi kesalahan ketika mendapatkan data user login");
-        return null;
+        
+        throw new Error("Tidak bisa login");
       }
       
     

@@ -30,6 +30,7 @@ const BookmarkIcon = ({ isBookmarked, onPress }: { isBookmarked: boolean; onPres
 
 const DetailPage = ({ route }: { route: any }) => {
   const router = useRouter();
+  const {longitude, latitude} = useLocalSearchParams();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [dest, setDest] = useState<DestinationType>({
     "name": "",
@@ -106,7 +107,7 @@ const DetailPage = ({ route }: { route: any }) => {
   useEffect(() => {
     const fetchDetailData = async () => {
       try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/places/${id}`);
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/places/${id}?user_lat=${latitude}&user_lon=${longitude}`);
         if (!response.ok) {
           throw new Error('Failed to fetch destination data');
         }
@@ -118,6 +119,12 @@ const DetailPage = ({ route }: { route: any }) => {
       setIsLoading(false);
     };
 
+   
+    fetchDetailData();
+    
+  }, [refresh]);
+
+  useEffect(()=>{
     const fetchBookmarkData = async () => {
       try {
         const data = await getLoginUser();
@@ -125,15 +132,14 @@ const DetailPage = ({ route }: { route: any }) => {
 
         } else {
           const mapData = data.saved_places.map((place: any) => place.id);
-          setIsBookmarked(mapData.includes(id));
+          setIsBookmarked(mapData.includes(Number(id)));
         }
       } catch (err) {
         Alert.alert("error", "Tidak dapat mengakses data");
       }
     };
-    fetchDetailData();
     fetchBookmarkData();
-  }, [refresh]);
+  },[])
 
   const handleBookmarkToggle = async () => {
     try {
@@ -196,7 +202,7 @@ const DetailPage = ({ route }: { route: any }) => {
           <View className="flex-1 flex-row items-center gap">
             <InfoCard
               icon={<MaterialIcons name="location-on" size={20} color="#008080" />}
-              text={dest?.distance ? dest.distance.toString() : '-'}
+              text={dest?.distance ? dest.distance.toFixed(1).toString() + " km" : '-'}
               onPress={openGoogleMaps}
             />
             <InfoCard

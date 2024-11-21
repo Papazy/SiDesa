@@ -17,15 +17,11 @@ type DestinationType = {
 };
 
 const Maps = () => {
-  const apiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+
   const [destinations, setDestinations] = useState<DestinationType[]>([]);
   const [selectedDestination, setSelectedDestination] = useState<any | null>({
     latitude: 0,
     longitude: 0,
-  });
-  const [currentLocation, setCurrentLocation] = useState<any | null>({
-    latitude: 5.741861,
-    longitude: 95.046500,
   });
   // Fetch data dari API saat komponen dimuat
   useEffect(() => {
@@ -56,71 +52,75 @@ const Maps = () => {
 
 
   // ===================== Get Current Location =====================
+  const [currentLocation, setCurrentLocation] = useState<any | null>({
+    latitude: 5.741861,
+    longitude: 95.046500,
+  });
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState('Location Loading.....');
   const [locationServicesEnabled, setLocationServicesEnabled] = useState(false)
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
-  useEffect(()=>{
-   checkIfLocationEnabled();
-   getCurrentLocation();
-  },[])
-  const checkIfLocationEnabled= async ()=>{
-    let enabled = await Location.hasServicesEnabledAsync();       
-    if(!enabled){                    
+  useEffect(() => {
+    checkIfLocationEnabled();
+    getCurrentLocation();
+  }, [])
+  const checkIfLocationEnabled = async () => {
+    let enabled = await Location.hasServicesEnabledAsync();
+    if (!enabled) {
       Alert.alert('Location not enabled', 'Please enable your Location', [
         {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
       ]);
-    }else{
-      setLocationServicesEnabled(enabled)         
+    } else {
+      setLocationServicesEnabled(enabled)
     }
   }
   //get current location
-  const getCurrentLocation= async ()=>{
-       let {status} = await Location.requestForegroundPermissionsAsync(); 
-      console.log(status);
-       if(status !== 'granted'){
-        Alert.alert('Permission denied', 'Allow the app to use the location services', [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ]);
-       }
+  const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    console.log(status);
+    if (status !== 'granted') {
+      Alert.alert('Permission denied', 'Allow the app to use the location services', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    }
 
-         //get current position lat and long
-       const {coords} = await Location.getCurrentPositionAsync();  
-       console.log(coords)
-       
-       if(coords){
-        const {latitude,longitude} =coords;
-        console.log(latitude,longitude);
-        setLatitude(latitude);
-        setLongitude(longitude);
-      
-        // setCurrentLocation({
-        //   latitude,
-        //   longitude
-        // })
+    //get current position lat and long
+    const { coords } = await Location.getCurrentPositionAsync();
+    console.log(coords)
 
-        // mendapatkan alamat dari latitude dan longitude
-        let responce = await Location.reverseGeocodeAsync({           
-          latitude,
-          longitude
-        });
-        console.log(responce);
-        for(let item of responce ){
-         let address = `${item.name} ${item.city} ${item.postalCode}`
-          setDisplayCurrentAddress(address)
-        }
-           }
+    if (coords) {
+      const { latitude, longitude } = coords;
+      console.log(latitude, longitude);
+      setLatitude(latitude);
+      setLongitude(longitude);
+
+      setCurrentLocation({
+        latitude,
+        longitude
+      })
+
+      // mendapatkan alamat dari latitude dan longitude
+      let responce = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude
+      });
+      console.log(responce);
+      for (let item of responce) {
+        let address = `${item.name} ${item.city} ${item.postalCode}`
+        setDisplayCurrentAddress(address)
+      }
+    }
   }
 
 
@@ -146,10 +146,10 @@ const Maps = () => {
           >
             <MyCustomMarkerView image_url={destination.image_url} />
             <Callout tooltip>
-              <CustomCalloutView 
-                title={destination.name} 
-                description={destination.location_name} 
-                image_url={destination.image_url} 
+              <CustomCalloutView
+                title={destination.name}
+                description={destination.location_name}
+                image_url={destination.image_url}
                 latitude={destination.latitude}
                 longitude={destination.longitude}
               />
@@ -164,36 +164,31 @@ const Maps = () => {
           title="Lokasi Anda"
           description={"Lokasi Anda"}
         />
-        {selectedDestination && currentLocation && (
-          <MapViewDirections
-            origin={currentLocation}
-            destination={selectedDestination}
-            apikey={apiKey}
-            strokeWidth={5}
-            strokeColor="blue"
-          />
-        )}
+
       </MapView>
     </View>
   );
 };
 
 // Komponen untuk menampilkan custom marker
-const MyCustomMarkerView = ({ image_url } :any) => {
+const MyCustomMarkerView = ({ image_url }: any) => {
   return (
-    <View style={styles.markerContainer}>
-      <Image source={{ uri: image_url }} style={styles.markerImage} />
+    <View style={styles.markerWrapper}>
+      <View style={styles.markerContainer}>
+        <Image source={{ uri: image_url }} style={styles.markerImage} />
+      </View>
+      <View style={styles.markerTriangle} />
     </View>
   );
 };
 
 
-const CustomCalloutView = ({ title, description, image_url, latitude, longitude } : any) => {
-  // Fungsi untuk membuka Google Maps dengan Platform.select
+const CustomCalloutView = ({ title, description, image_url, latitude, longitude }: any) => {
+
   const openGoogleMaps = () => {
     const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
     const latLng = `${latitude},${longitude}`;
-    const label = title; 
+    const label = title;
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`
@@ -208,8 +203,8 @@ const CustomCalloutView = ({ title, description, image_url, latitude, longitude 
       <View style={styles.calloutTextContainer}>
         <Text style={styles.calloutTitle}>{title}</Text>
         <Text style={styles.calloutDescription}>{description}</Text>
-       
-        <TouchableOpacity style={styles.button} onPress={()=>openGoogleMaps()}>
+
+        <TouchableOpacity style={styles.button} onPress={() => openGoogleMaps()}>
           <Text style={styles.buttonText}>Open in Google Maps</Text>
         </TouchableOpacity>
       </View>
@@ -229,6 +224,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  markerWrapper: {
+    alignItems: 'center',
+  },
   markerContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
@@ -246,6 +244,20 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  markerTriangle: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderTopWidth: 15,
+    borderStyle: 'solid',
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFFFFF',
+    marginTop: -1,
+  },
+
   calloutContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',

@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { DestinationType } from '@/types/Destination';
 
 
-const CardDest = ({ dest }: { dest: DestinationType }) => {
+const CardDest = ({ dest, latitude, longitude }: {dest: DestinationType, latitude: number, longitude: number}) => {
   const router = useRouter();
   return (
     <TouchableOpacity
@@ -22,7 +22,7 @@ const CardDest = ({ dest }: { dest: DestinationType }) => {
         elevation: 2,
       }}
 
-      onPress={() => router.push(`/detail/${dest.id}`)}
+      onPress={() => router.push({pathname:`/detail/${dest.id}`, params: {latitude, longitude}})}
     >
       {dest.image_url && <Image source={{ uri: dest.image_url }} style={{ width: '100%', height: 120 }} />}
       {/* <Image source={dest.image_url} style={{ width: '100%', height: 120 }} /> */}
