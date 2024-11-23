@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import gambar from '@/assets/images/user-avatar.png';
 import axios from 'axios';
 
-const EditProfile = () => {
+const EmailProfile = () => {
   const { user, updateUser, token }: any = useAuth();
   const router = useRouter();
   
@@ -98,22 +98,32 @@ const EditProfile = () => {
           <MaterialIcons name="arrow-back-ios" size={20} color="#008080" />
         </TouchableOpacity>
 
-        <Text className="text-lg font-bold mt-4">Email</Text>
+        <Text className="text-lg font-bold mt-4">Edit Profile</Text>
 
-       
+        {/* Profile Image */}
+        <TouchableOpacity onPress={pickImage} className="mt-5 flex-1 justify-center items-center">
+          <View className="border rounded-full overflow-hidden w-24 h-24">
+            <Image
+              source={photoUrl ? { uri: photoUrl } : gambar}
+              className="w-24 h-24 rounded-full"
+              style={{ resizeMode: 'cover' }}
+            />
+          </View>
+          <Text className="text-teal-600 mt-2">Change Profile Picture</Text>
+        </TouchableOpacity>
 
+        {/* Name Input */}
         <View className="w-full mt-6">
           <Text className="text-gray-700 mb-2">Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="Enter your name"
-            editable={false} selectTextOnFocus={false}
             className="border rounded-lg p-3 bg-gray-100"
           />
         </View>
 
-        
+        {/* Email Input */}
         <View className="w-full mt-4">
           <Text className="text-gray-700 mb-2">Email</Text>
           <TextInput
@@ -121,15 +131,20 @@ const EditProfile = () => {
             onChangeText={setEmail}
             placeholder="Enter your email"
             keyboardType="email-address"
-            editable={false} selectTextOnFocus={false}
             className="border rounded-lg p-3 bg-gray-100"
           />
         </View>
 
-      
+        {/* Save Button */}
+        <TouchableOpacity
+          className="bg-teal-600 px-4 py-2 mt-6 rounded-md w-full"
+          onPress={handleSave}
+        >
+          <Text className="text-white text-center">Save Changes</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
 
-export default EditProfile;
+export default EmailProfile;

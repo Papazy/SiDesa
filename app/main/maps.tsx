@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Linking, Platform, Alert } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import MapView, { Marker, Callout, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useFocusEffect, useRouter } from 'expo-router';
 
 type DestinationType = {
   name: string;
@@ -24,34 +27,39 @@ const Maps = () => {
     longitude: 0,
   });
   // Fetch data dari API saat komponen dimuat
-  useEffect(() => {
-    const fetchDestinations = async () => {
-      try {
-        const response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/places/?skip=0&limit=100');
-        if (response.ok) {
-          const data = await response.json();
-          setDestinations(data);
 
-          setSelectedDestination({
-            latitude: parseFloat(data[0].latitude),
-            longitude: parseFloat(data[0].longitude),
-          })
-          console.log(data);
-        } else {
-          console.log('Tidak ada data');
-          alert("Tidak ada data");
+  useFocusEffect(
+    useCallback(()=>{
+      const fetchDestinations = async () => {
+        try {
+          const response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/places/?skip=0&limit=100');
+          if (response.ok) {
+            const data = await response.json();
+            setDestinations(data);
+  
+            setSelectedDestination({
+              latitude: parseFloat(data[0].latitude),
+              longitude: parseFloat(data[0].longitude),
+            })
+            console.log(data);
+          } else {
+            console.log('Tidak ada data');
+            alert("Tidak ada data");
+          }
+        } catch (error) {
+          console.log(error);
+          alert("Terjadi kesalahan saat mengambil data");
         }
-      } catch (error) {
-        console.log(error);
-        alert("Terjadi kesalahan saat mengambil data");
-      }
-    };
-
-    fetchDestinations();
+      };
+  
+      fetchDestinations();
+    }, [])
+  )
+  useEffect(() => {
+   
   }, []);
 
 
-  // ===================== Get Current Location =====================
   const [currentLocation, setCurrentLocation] = useState<any | null>({
     latitude: 5.741861,
     longitude: 95.046500,
@@ -124,10 +132,26 @@ const Maps = () => {
   }
 
 
+  const openGoogleMaps = (destination : any) => {
+    const title=destination.name
+    const thisLatitude=destination.latitude
+    const thisLongitude=destination.longitude
+
+    const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = `${thisLatitude},${thisLongitude}`;
+    const label = title;
+    const url :any = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+    Linking.openURL(url);
+  };
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
+        provider={PROVIDER_GOOGLE}  
         initialRegion={{
           latitude: 5.694587,
           longitude: 95.078116,
@@ -143,6 +167,7 @@ const Maps = () => {
               latitude: parseFloat(destination.latitude),
               longitude: parseFloat(destination.longitude),
             }}
+            onCalloutPress={() => openGoogleMaps(destination)}
           >
             <MyCustomMarkerView image_url={destination.image_url} />
             <Callout tooltip>
@@ -152,6 +177,7 @@ const Maps = () => {
                 image_url={destination.image_url}
                 latitude={destination.latitude}
                 longitude={destination.longitude}
+                id={destination.id}
               />
             </Callout>
           </Marker>
@@ -183,29 +209,40 @@ const MyCustomMarkerView = ({ image_url }: any) => {
 };
 
 
-const CustomCalloutView = ({ title, description, image_url, latitude, longitude }: any) => {
+const CustomCalloutView = ({ title, description, image_url, latitude, longitude,id }: any) => {
 
   const openGoogleMaps = () => {
     const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
     const latLng = `${latitude},${longitude}`;
     const label = title;
-    const url = Platform.select({
+    const url :any = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`
     });
-
     Linking.openURL(url);
   };
 
+  const router = useRouter();
+  const openDetail =() =>{
+    router.replace(`/detail/${id}`);
+    return
+  }
+
+
+
+
   return (
     <View style={styles.calloutContainer}>
-      <Image source={{ uri: image_url }} style={styles.calloutImage} />
+      <Image resizeMode='contain' source={{ uri: image_url }} style={styles.calloutImage} />
       <View style={styles.calloutTextContainer}>
         <Text style={styles.calloutTitle}>{title}</Text>
         <Text style={styles.calloutDescription}>{description}</Text>
 
         <TouchableOpacity style={styles.button} onPress={() => openGoogleMaps()}>
-          <Text style={styles.buttonText}>Open in Google Maps</Text>
+        <FontAwesome name="map-marker" size={24} color="white" /><Text style={styles.buttonText}>Open in Google Maps</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => openDetail(id)}>
+        <MaterialIcons name="info-outline" size={24} color="white" /><Text style={styles.buttonText} >Detail</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -273,10 +310,11 @@ const styles = StyleSheet.create({
     width: 220,
   },
   calloutImage: {
-    width: 60,
+     width: 60,
     height: 60,
     borderRadius: 10,
     marginRight: 10,
+    
   },
   calloutTextContainer: {
     flex: 1,
@@ -292,17 +330,26 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   button: {
+    flex: 1,
+    flexDirection:'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 5,
     backgroundColor: '#007AFF',
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
   },
+
   buttonText: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems:'center',
+    flexDirection:'row',
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
-    textAlign: 'center',
+    textAlign:'center'
   },
 });
 

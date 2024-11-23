@@ -21,8 +21,6 @@ const SecurityPage = () => {
   )
   // Data for the security options
   const securityOptions = [
-    
-  
     {
       title: 'Sandi',
       description: 'Ubah Sandi anda',
@@ -33,7 +31,7 @@ const SecurityPage = () => {
       title: 'Email',
       description: user?.email,
       icon: 'mail',
-      link: '/profile/security/email', // Replace with the actual route
+      link: '/profile/email', // Replace with the actual route
     },
    
   ];

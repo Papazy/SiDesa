@@ -25,13 +25,6 @@ const menuOptions= [
     icon: 'settings',
     link: '/profile/settings',
   },
-  {
-    id: 3,
-    title: 'FAQ',
-    description: 'Pusat Bantuan',
-    icon: 'help-circle',
-    link: '/profile/faq',
-  },
 ]
 
 

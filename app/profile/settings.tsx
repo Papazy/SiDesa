@@ -12,31 +12,19 @@ const SettingsPage = () => {
       title: 'Bahasa',
       description: 'Bahasa Indonesia',
       icon: 'globe',
-      link: '/settings/language'
+      link: '/profile/language'
     },
-    {
-      title: 'Notifikasi',
-      description: 'Pesan, grup dan pemberitahuan lain',
-      icon: 'bell',
-      link: '/settings/notifications'
-    },
-    {
-      title: 'Penyimpanan dan data',
-      description: 'Kelola penyimpanan',
-      icon: 'database',
-      link: '/settings/storage'
-    },
-    {
-      title: 'Hapus Akun',
-      description: 'Keluar dan hapus akun',
-      icon: 'trash',
-      link: '/settings/delete-account'
-    },
+    // {
+    //   title: 'Notifikasi',
+    //   description: 'Pesan, grup dan pemberitahuan lain',
+    //   icon: 'bell',
+    //   link: '/settings/notifications'
+    // },
     {
       title: 'Bantuan',
       description: 'Pusat bantuan',
       icon: 'help-circle',
-      link: '/settings/help'
+      link: '/profile/help'
     }
   ];
 

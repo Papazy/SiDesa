@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,6 +23,10 @@ export default function Index() {
     fetchToken();
   },[])
 
-  if(isLoading) return <Text>Loading...</Text>
+  if(isLoading) return (
+    <View className="flex-1 justify-center items-center">
+      <ActivityIndicator size={'large'} color={'blue'} />
+    </View>
+  )
   return <Redirect href="/onBoarding" />;
 }
