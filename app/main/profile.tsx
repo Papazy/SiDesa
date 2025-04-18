@@ -25,6 +25,13 @@ const menuOptions= [
     icon: 'settings',
     link: '/profile/settings',
   },
+  {
+    id: 3,
+    title: 'Kontak',
+    description: 'Daftar Kontak',
+    icon: 'phone',
+    link: '/profile/contact',
+  }
 ]
 
 
